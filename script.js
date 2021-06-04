@@ -14,7 +14,7 @@ const showSuggestion = (shouldShow) => {
 
 
 
-let timerCancel;
+// let timerCancel;
 
 
 const fetchData = async (q) => {
@@ -29,42 +29,66 @@ const fetchData = async (q) => {
 }
 
 const displayResult = async (q) => {
-    const books = await fetchData(q);
-    showSuggestion(false);
-    const list = document.createElement('li');
-    list.textContent = `${books.length ? books.length : 'No'} results found`;
-    list.className = "result-text"
-    suggestionList.appendChild(list);
-
-    for (let book of books) {
+    if(q.length){
+        const books = await fetchData(q);
+        showSuggestion(false);
         const list = document.createElement('li');
-        list.innerText = book;
+        list.textContent = `${books.length ? books.length : 'No'} results found`;
+        list.className = "result-text"
         suggestionList.appendChild(list);
+    
+        for (let book of books) {
+            const list = document.createElement('li');
+            list.innerText = book;
+            suggestionList.appendChild(list);
+        }
+        showSuggestion(true);
+    
     }
-    showSuggestion(true);
 
-}
-
-
-search.addEventListener('keyup', async (e) => {
-    let timer;
-    if (timerCancel) {
-        clearTimeout(timerCancel);
-    }
-    const q = e.target.value
-
-    if (q.length) {
-        timer = setTimeout(() => {
-            displayResult(q);
-        }, 500);
-    }
     else {
         showSuggestion(false);
     }
+    
+}
 
-    timerCancel = timer
+const debounce = (fn, delay) => {
+    let timer
+    return function () {
+        const self = this
+        const args = self.value
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+                fn.call(self,args);
+        }, delay)
+    }
+}
 
-});
+search.addEventListener('keyup', debounce(displayResult,500))
+
+
+// search.addEventListener('keyup', async (e) => {
+//     // let timer;
+//     // if (timerCancel) {
+//     //     clearTimeout(timerCancel);
+//     // }
+//     const q = e.target.value
+
+//     if (q.length) {
+//         // timer = setTimeout(() => {
+//         //     displayResult(q);
+//         // }, 500);
+
+//         const showResult = debounce(displayResult,500);
+//         showResult(q)
+//     }
+//     else {
+//         showSuggestion(false);
+//     }
+
+//     // timerCancel = timer
+
+// });
 
 
 
