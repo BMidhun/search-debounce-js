@@ -64,7 +64,7 @@ const debounce = (fn, delay) => {
     }
 }
 
-search.addEventListener('keyup', debounce(displayResult,500))
+search.addEventListener('input', debounce(displayResult,500))
 
 
 // search.addEventListener('keyup', async (e) => {
