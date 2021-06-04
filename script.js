@@ -55,7 +55,7 @@ const displayResult = async (q) => {
 const debounce = (fn, delay) => {
     let timer
     return function () {
-        const self = this
+        const self = this // refers to the input element
         const args = self.value
         clearTimeout(timer);
         timer = setTimeout(() => {
